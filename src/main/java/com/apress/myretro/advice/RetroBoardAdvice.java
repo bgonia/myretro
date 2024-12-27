@@ -20,11 +20,9 @@ public class RetroBoardAdvice {
     @Around("execution(* com.apress.myretro.persistence.RetroBoardRepository.findById(java.util.UUID))")
     public Object checkFindRetroBoard(ProceedingJoinPoint proceedingJoinPoint) throws Throwable{
         log.info("[ADVICE] findRetroBoardById");
-        Optional<RetroBoard> retroBoard = (Optional<RetroBoard>) proceedingJoinPoint.proceed(
-                new Object[]{
-                        UUID.fromString(proceedingJoinPoint.getArgs()[0].toString())
-                }
-        );
+        @SuppressWarnings("unchecked")
+        Optional<RetroBoard> retroBoard = (Optional<RetroBoard>) proceedingJoinPoint.proceed(new Object[]{UUID.fromString(proceedingJoinPoint.getArgs()[0].toString())});
+
 
         if(retroBoard.isEmpty()) throw new RetroBoardNotFoundException();
         return retroBoard;
